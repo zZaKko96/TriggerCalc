@@ -83,6 +83,14 @@ MonoBehaviour:
     m_Key: error_empty_input
     m_Metadata:
       m_Items: []
+  - m_Id: 10006925733888
+    m_Key: save_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10059891404800
+    m_Key: result_saved_feedback
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
