@@ -6,6 +6,7 @@ using UnityEngine.Localization.Settings;
 using System.Collections.Generic;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization;
+using System.Collections; 
 
 public class UIManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class UIManager : MonoBehaviour
     [Header("Елементи Екрану Результатів")]
     public GameObject resultLabelObject; 
     public TextMeshProUGUI resultValueText;
+    public TextMeshProUGUI feedbackText;
 
     [Header("Елементи Локалізації")]
     public TMP_Dropdown languageDropdown;
@@ -35,6 +37,7 @@ public class UIManager : MonoBehaviour
     {
         ShowMainMenu();
         PopulateLanguageDropdown();
+        feedbackText.gameObject.SetActive(false); 
     }
 
     public void ShowMainMenu()
@@ -56,6 +59,7 @@ public class UIManager : MonoBehaviour
         MainMenu_Panel.SetActive(false);
         DataInput_Panel.SetActive(false);
         Results_Panel.SetActive(true);
+        feedbackText.gameObject.SetActive(false);
     }
 
     public void OnButton_RS_Click()
@@ -150,7 +154,9 @@ public class UIManager : MonoBehaviour
     {
         if (lastResult != null)
         {
-            appManager.SaveResult(lastResult);
+            appManager.SaveResult(lastResult, currentTriggerType);
+
+            StartCoroutine(ShowFeedback("result_saved_feedback"));
         }
     }
 
@@ -215,5 +221,28 @@ public class UIManager : MonoBehaviour
         resultValueText.text = localizedString.Task.Result;
 
         ShowResultScreen();
+    }
+
+    IEnumerator ShowFeedback(string localizationKey)
+    {
+        var localizedStringOperation = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("UI_Translations", localizationKey);
+
+        yield return localizedStringOperation;
+
+        if (localizedStringOperation.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+        {
+            feedbackText.text = localizedStringOperation.Result;
+        }
+        else
+        {
+            Debug.LogError($"Не вдалося завантажити рядок локалізації: {localizationKey}");
+            feedbackText.text = "Error"; 
+        }
+
+        feedbackText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(2.0f);
+
+        feedbackText.gameObject.SetActive(false);
     }
 }
