@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI_Translations Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: UI_Translations
+  m_TableCollectionNameGuidString: 0dc15d284bd80ea4dbd7840cc4084ca1
+  m_Entries:
+  - m_Id: 39678177280
+    m_Key: main_title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 156128833536
+    m_Key: rs_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 181600841728
+    m_Key: jk_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 203583188992
+    m_Key: d_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 246700634112
+    m_Key: t_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1333402857472
+    m_Key: exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3690509430784
+    m_Key: calculate_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3865118306304
+    m_Key: tomenu_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3909737312256
+    m_Key: back_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4648828203008
+    m_Key: placeholder_d
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4675113906176
+    m_Key: placeholder_t
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4703047970816
+    m_Key: placeholder_rs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4738292707328
+    m_Key: placeholder_jk
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7240580919296
+    m_Key: result_label
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7268397543424
+    m_Key: error_rsjk_lines
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7310642573312
+    m_Key: error_length_mismatch
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7340011089920
+    m_Key: error_empty_input
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 6681963320090558721
+  references:
+    version: 2
+    RefIds:
+    - rid: 6681963320090558721
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1762877685821
