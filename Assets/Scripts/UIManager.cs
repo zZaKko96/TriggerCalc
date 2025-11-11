@@ -1,7 +1,11 @@
 using UnityEngine;
 using TMPro; 
 using System.Text; 
-using System; 
+using System;
+using UnityEngine.Localization.Settings; 
+using System.Collections.Generic;
+using UnityEngine.Localization.Components;
+using UnityEngine.Localization;
 
 public class UIManager : MonoBehaviour
 {
@@ -15,18 +19,22 @@ public class UIManager : MonoBehaviour
 
     [Header("Елементи Екрану Вводу")]
     public TMP_InputField inputField_1;
-    private TextMeshProUGUI inputPlaceholder; 
 
     [Header("Елементи Екрану Результатів")]
-    public TextMeshProUGUI resultText; 
+    public GameObject resultLabelObject; 
+    public TextMeshProUGUI resultValueText;
+
+    [Header("Елементи Локалізації")]
+    public TMP_Dropdown languageDropdown;
+    public LocalizeStringEvent placeholderLocalizer; 
 
     private SignalData lastResult;
     private string currentTriggerType; 
 
     void Start()
     {
-        inputPlaceholder = inputField_1.placeholder.GetComponent<TextMeshProUGUI>();
         ShowMainMenu();
+        PopulateLanguageDropdown();
     }
 
     public void ShowMainMenu()
@@ -55,7 +63,7 @@ public class UIManager : MonoBehaviour
         appManager.CreateTrigger("RS");
         currentTriggerType = "RS";
         inputField_1.text = ""; 
-        inputPlaceholder.text = "Enter R signals (line 1)\nEnter S signals (line 2)";
+        placeholderLocalizer.StringReference.SetReference("UI_Translations", "placeholder_rs");
         ShowDataInputMenu();
     }
 
@@ -64,7 +72,7 @@ public class UIManager : MonoBehaviour
         appManager.CreateTrigger("JK");
         currentTriggerType = "JK";
         inputField_1.text = ""; 
-        inputPlaceholder.text = "Enter J signals (line 1)\nEnter K signals (line 2)";
+        placeholderLocalizer.StringReference.SetReference("UI_Translations", "placeholder_jk");
         ShowDataInputMenu();
     }
 
@@ -72,8 +80,8 @@ public class UIManager : MonoBehaviour
     {
         appManager.CreateTrigger("D");
         currentTriggerType = "D";
-        inputField_1.text = ""; 
-        inputPlaceholder.text = "Enter D signals...";
+        inputField_1.text = "";
+        placeholderLocalizer.StringReference.SetReference("UI_Translations", "placeholder_d");
         ShowDataInputMenu();
     }
 
@@ -82,7 +90,7 @@ public class UIManager : MonoBehaviour
         appManager.CreateTrigger("T");
         currentTriggerType = "T";
         inputField_1.text = ""; 
-        inputPlaceholder.text = "Enter T signals...";
+        placeholderLocalizer.StringReference.SetReference("UI_Translations", "placeholder_t");
         ShowDataInputMenu();
     }
 
@@ -103,16 +111,12 @@ public class UIManager : MonoBehaviour
         {
             if (lines.Length < 2)
             {
-                Debug.LogError("Для RS/JK тригерів потрібно 2 рядки вводу!");
-                resultText.text = "Error:\nДля RS/JK тригерів\nпотрібно 2 рядки вводу!";
-                ShowResultScreen();
+                ShowError("error_rsjk_lines");
                 return;
             }
             if (lines[0].Trim().Length != lines[1].Trim().Length)
             {
-                Debug.LogError("Рядки вводу мають бути однакової довжини!");
-                resultText.text = "Error:\nРядки вводу мають\nбути однакової довжини!";
-                ShowResultScreen();
+                ShowError("error_length_mismatch");
                 return;
             }
 
@@ -123,9 +127,7 @@ public class UIManager : MonoBehaviour
         {
             if (lines.Length < 1)
             {
-                Debug.LogError("Поле вводу пусте!");
-                resultText.text = "Error:\nПоле вводу пусте!";
-                ShowResultScreen();
+                ShowError("error_empty_input");
                 return;
             }
             inputData.inputSequence1 = ConvertStringToBoolArray(lines[0].Trim());
@@ -154,11 +156,11 @@ public class UIManager : MonoBehaviour
 
     public void ShowResult(SignalData result)
     {
-        lastResult = result;
+        lastResult = result; 
 
-        string resultString = ConvertBoolArrayToString(result.outputSequence);
+        resultLabelObject.SetActive(true);
 
-        resultText.text = "Result:\n" + resultString;
+        resultValueText.text = ConvertBoolArrayToString(result.outputSequence);
 
         ShowResultScreen();
     }
@@ -180,5 +182,38 @@ public class UIManager : MonoBehaviour
             sb.Append(b ? "1" : "0");
         }
         return sb.ToString();
+    }
+
+    void PopulateLanguageDropdown()
+    {
+        languageDropdown.ClearOptions();
+
+        List<string> options = new List<string>();
+        for (int i = 0; i < LocalizationSettings.AvailableLocales.Locales.Count; ++i)
+        {
+            options.Add(LocalizationSettings.AvailableLocales.Locales[i].LocaleName);
+        }
+
+        languageDropdown.AddOptions(options);
+
+        languageDropdown.value = LocalizationSettings.AvailableLocales.Locales.IndexOf(LocalizationSettings.SelectedLocale);
+
+        languageDropdown.onValueChanged.AddListener(OnLanguageChanged);
+    }
+
+    public void OnLanguageChanged(int index)
+    {
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+    }
+    async void ShowError(string errorKey)
+    {
+        resultLabelObject.SetActive(false);
+
+        var localizedString = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("UI_Translations", errorKey);
+        await localizedString.Task; 
+
+        resultValueText.text = localizedString.Task.Result;
+
+        ShowResultScreen();
     }
 }
