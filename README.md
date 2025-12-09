@@ -37,7 +37,6 @@
 | Головне меню | Процес розрахунку |
 |:---:|:---:|
 | ![Main Menu](https://via.placeholder.com/400x250?text=Menu+Screenshot) | ![Calculation](https://via.placeholder.com/400x250?text=Calculation+Screenshot) |
-*(Тут можна вставити реальні скріншоти з папки Assets або посилання на зображення)*
 
 ---
 
